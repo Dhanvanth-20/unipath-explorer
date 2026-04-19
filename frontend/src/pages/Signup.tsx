@@ -1,58 +1,70 @@
-import { useState } from "react";
+import { useGoogleLogin } from '@react-oauth/google';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { GraduationCap, Mail, Lock, User } from "lucide-react";
+import { GraduationCap, ArrowRightLeft, Star, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      window.location.href = `http://localhost:3001/auth/google`;
+    },
+    onError: (error) => {
+      console.error('Google signup error:', error);
+    },
+    flow: 'auth-code'
+  });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="gradient-primary p-2.5 rounded-xl">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/50 to-background flex items-center justify-center px-4 py-12">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }} 
+        animate={{ opacity: 1, scale: 1 }} 
+        className="w-full max-w-sm"
+      >
+        <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-xl">
+          <CardHeader className="text-center space-y-4 pb-8">
+            <div className="gradient-primary p-4 w-fit rounded-2xl mx-auto shadow-lg">
+              <GraduationCap className="h-8 w-8 text-primary-foreground" />
             </div>
-            <span className="font-display font-bold text-2xl text-foreground">UniPath</span>
-          </Link>
-          <h1 className="text-2xl font-display font-bold text-foreground">Create your account</h1>
-          <p className="text-muted-foreground mt-1">Start your study abroad journey</p>
-        </div>
+            <div>
+              <CardTitle className="text-2xl font-display font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                Join UniPath Today
+              </CardTitle>
+              <CardDescription className="text-lg">
+                Start your global study adventure with one click
+              </CardDescription>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="space-y-6 p-8">
+            <Button 
+              onClick={() => googleLogin()}
+              className="w-full h-14 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 border border-emerald-400/30 shadow-xl hover:shadow-2xl hover:from-emerald-600 hover:to-green-700 hover:-translate-y-0.5 transition-all duration-300 font-semibold text-lg flex items-center gap-3 group text-white"
+            >
+              <ArrowRightLeft className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+              Sign up with Google
+            </Button>
+            
 
-        <div className="bg-card border border-border rounded-xl p-6 shadow-card space-y-4">
-          <div>
-            <Label htmlFor="name">Full Name</Label>
-            <div className="relative mt-1.5">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" className="pl-10" />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <div className="relative mt-1.5">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-10" />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <div className="relative mt-1.5">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-10" />
-            </div>
-          </div>
-          <Button className="w-full rounded-full">Create Account</Button>
-        </div>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Already have an account?{" "}
-          <Link to="/login" className="text-primary font-medium hover:underline">Sign in</Link>
+            <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground text-center">
+              <div className="flex flex-col items-center gap-1">
+                <Star className="h-4 w-4 mx-auto text-yellow-500" />
+                <span>Premium</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <Globe className="h-4 w-4 mx-auto" />
+                <span>Global</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <p className="text-center text-sm text-muted-foreground mt-8">
+          Already a member?{" "}
+          <Link to="/login" className="text-primary font-medium hover:underline underline-offset-2">Sign in</Link>
         </p>
       </motion.div>
     </div>

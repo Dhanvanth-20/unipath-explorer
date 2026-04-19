@@ -32,7 +32,7 @@ export default function LandingPage() {
               <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-lg">
                 UniPath simplifies your study abroad journey. Compare countries, find the best universities, check your eligibility, and calculate costs — all in one place.
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-wrap gap-4 mb-12">
                 <Link to="/universities">
                   <Button size="lg" className="gap-2 rounded-full px-8">
                     Start Exploring <ArrowRight className="h-4 w-4" />
@@ -55,13 +55,25 @@ export default function LandingPage() {
               <img src={heroImage} alt="Study abroad illustration showing globe with universities" className="w-full animate-float" />
             </motion.div>
           </div>
+
+          <div className="bg-gradient-primary/5 border border-primary/20 rounded-3xl p-8 mb-8 shadow-2xl backdrop-blur-sm max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-4 md:gap-6 text-center md:text-left">
+              <div className="bg-primary/30 p-4 rounded-2xl shadow-lg">
+                <span className="text-primary text-2xl font-bold block">ℹ️</span>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-black text-amber-800 text-xl md:text-2xl mb-3 uppercase tracking-wider drop-shadow-md">DISCLAIMER</h4>
+                <p className="text-base font-semibold text-destructive/90 leading-relaxed drop-shadow-sm">
+                  The currency values may vary from time-to-time. So please have an idea of current currency rates/values before making financial decisions.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* Features */}
-      <section className="py-20">
+      <section className="pt-8 pb-16">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
+          <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">
               Everything You Need to <span className="text-gradient">Decide</span>
             </h2>
@@ -94,24 +106,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="gradient-primary rounded-2xl p-10 md:p-16 text-center">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground mb-4">
-              Ready to Start Your Journey?
-            </h2>
-            <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
-              Join thousands of students who found their dream university with UniPath.
-            </p>
-            <Link to="/signup">
-              <Button size="lg" variant="secondary" className="rounded-full px-10 font-semibold">
-                Get Started Free
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+
     </PageLayout>
   );
 }

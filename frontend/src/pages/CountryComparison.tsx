@@ -48,11 +48,13 @@ export default function CountryComparison() {
                   <SelectValue placeholder={`Country ${i + 1}`} />
                 </SelectTrigger>
                 <SelectContent className="bg-popover">
-                  {countries.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.flag} {c.name}
-                    </SelectItem>
-                  ))}
+                  {countries
+                    .filter((c) => !selected.some((s, j) => s === c.id && j !== i))
+                    .map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.flag} {c.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             ))}
@@ -65,7 +67,7 @@ export default function CountryComparison() {
 
           {/* Table */}
           {selectedCountries.length > 0 && (
-            <div className="bg-card rounded-xl border border-border overflow-hidden shadow-card mb-10">
+            <div key={selected.filter(Boolean).join(',')} className="bg-card rounded-xl border border-border overflow-hidden shadow-card mb-10">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -101,7 +103,7 @@ export default function CountryComparison() {
 
           {/* Chart */}
           {data.length > 0 && (
-            <div className="bg-card rounded-xl border border-border p-6 shadow-card">
+            <div key={data.map((d) => d.name).join(',')} className="bg-card rounded-xl border border-border p-6 shadow-card">
               <h3 className="font-display font-semibold text-lg mb-4 text-foreground">Cost Comparison</h3>
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart data={data} barGap={8}>

@@ -8,33 +8,43 @@ import CountryComparison from "./pages/CountryComparison";
 import UniversityFinder from "./pages/UniversityFinder";
 import EligibilityChecker from "./pages/EligibilityChecker";
 import CostCalculator from "./pages/CostCalculator";
-import Dashboard from "./pages/Dashboard";
+import VisaProcess from "./pages/VisaProcess";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/compare" element={<CountryComparison />} />
-          <Route path="/universities" element={<UniversityFinder />} />
-          <Route path="/eligibility" element={<EligibilityChecker />} />
-          <Route path="/calculator" element={<CostCalculator />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your_google_client_id_here';
+  return (
+    <QueryClientProvider client={queryClient}>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/compare" element={<ProtectedRoute><CountryComparison /></ProtectedRoute>} />
+                <Route path="/universities" element={<ProtectedRoute><UniversityFinder /></ProtectedRoute>} />
+                <Route path="/eligibility" element={<ProtectedRoute><EligibilityChecker /></ProtectedRoute>} />
+                <Route path="/calculator" element={<ProtectedRoute><CostCalculator /></ProtectedRoute>} />
+                <Route path="/visa" element={<ProtectedRoute><VisaProcess /></ProtectedRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

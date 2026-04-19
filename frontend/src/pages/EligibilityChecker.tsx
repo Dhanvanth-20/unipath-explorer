@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageLayout from "@/components/layout/PageLayout";
 import { universities, countries } from "@/data/mockData";
@@ -26,12 +26,56 @@ export default function EligibilityChecker() {
   const [result, setResult] = useState<Result | null>(null);
   const [step, setStep] = useState(0);
 
-  // Calculate progress based on filled fields
-  const gpaFilled = !!gpa;
-  const testFilled = testType === "ielts" ? !!ieltsScore : !!toeflScore;
-  const budgetFilled = !!budget;
-  
-  const progress = Math.round(((gpaFilled ? 1 : 0) + (testFilled ? 1 : 0) + (budgetFilled ? 1 : 0)) / 3 * 100);
+  // Persist form state to localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('eligibilityForm');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        setGpa(data.gpa || '');
+        setTestType(data.testType || 'ielts');
+        setIeltsScore(data.ieltsScore || '');
+        setToeflScore(data.toeflScore || '');
+        setGreScore(data.greScore || '');
+        setBudget(data.budget || '');
+      } catch (e) {
+        console.log('Invalid saved data');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('eligibilityForm', JSON.stringify({
+      gpa,
+      testType,
+      ieltsScore,
+      toeflScore,
+      greScore,
+      budget,
+    }));
+  }, [gpa, testType, ieltsScore, toeflScore, greScore, budget]);
+
+  // Clear storage on clear
+  const clearForm = () => {
+    setGpa('');
+    setIeltsScore('');
+    setToeflScore('');
+    setGreScore('');
+    setBudget('');
+    setTestType('ielts');
+    localStorage.removeItem('eligibilityForm');
+  };
+
+  // Calculate progress based on filled fields (equal weight)
+  const fields = [
+    !!gpa,
+    testType === "ielts" ? !!ieltsScore : !!toeflScore,
+    !!budget,
+    !!greScore, // GRE optional but counts for completion
+  ];
+  const filledFields = fields.filter(Boolean).length;
+  const totalFields = fields.length;
+  const progress = Math.round((filledFields / totalFields) * 100);
 
   const handleCheck = () => {
     const g = parseFloat(gpa);
@@ -236,18 +280,35 @@ export default function EligibilityChecker() {
                 </div>
               </div>
 
-              <Button 
-                onClick={handleCheck} 
-                className="rounded-full px-8" 
-                disabled={!isFormValid()}
-              >
-                Check Eligibility
-              </Button>
+              <div className="flex gap-3">
+                <Button 
+                  onClick={handleCheck} 
+                  className="rounded-full px-8 flex-1" 
+                  disabled={!isFormValid()}
+                >
+                  Check Eligibility
+                </Button>
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  className="rounded-full px-8 h-10"
+                  onClick={clearForm}
+                >
+                  Clear All
+                </Button>
+              </div>
             </div>
           )}
 
           {step === 1 && result && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+              {/* Modify Inputs Button at Top */}
+              <div className="mb-6">
+                <Button variant="outline" onClick={() => setStep(0)} className="rounded-full">
+                  ← Modify Inputs
+                </Button>
+              </div>
+
               {/* Eligible countries */}
               <div className="bg-card border border-border rounded-xl p-6 shadow-card">
                 <h3 className="font-display font-semibold text-foreground mb-3">Eligible Countries</h3>

@@ -10,11 +10,11 @@ import { Calculator, DollarSign } from "lucide-react";
 import { CurrencyConverter } from "@/components/ui/CurrencyConverter";
 
 // Currency symbols mapping
-const currencySymbols: Record<string, string> = {
+  const currencySymbols: Record<string, string> = {
   USD: "$",
   GBP: "£",
-  CAD: "C$",
-  AUD: "A$",
+  CAD: "$",
+  AUD: "$",
   EUR: "€",
   INR: "₹",
   JPY: "¥",
@@ -101,7 +101,7 @@ export default function CostCalculator() {
               </div>
             </div>
 
-            <Button onClick={calculate} className="rounded-full px-8 gap-2">
+            <Button onClick={calculate} disabled={!country} className="rounded-full px-8 gap-2">
               <Calculator className="h-4 w-4" /> Calculate
             </Button>
           </div>
@@ -127,13 +127,35 @@ export default function CostCalculator() {
 
           {/* Currency Converter - Shows INR conversion */}
           {calculatedAmount && (
-            <div className="mt-8">
+            <div className="mt-8 space-y-4">
               <CurrencyConverter 
                 initialAmount={calculatedAmount}
                 initialFromCurrency={countryCurrency}
                 initialToCurrency="INR"
-                simpleDisplay={true}
+                simpleDisplay={false}
               />
+              
+
+              
+              {/* Exchange Rates for Selected Country - Single box */}
+              <div className="bg-gradient-indigo text-center p-6 rounded-2xl border-4 border-indigo/30 shadow-xl">
+                <h4 className="text-lg font-semibold text-indigo-900 mb-4 uppercase tracking-wide">
+                  {selectedCountry?.name || 'Selected Country'} Exchange Rate
+                </h4>
+                <div className="text-xl font-bold text-indigo-foreground mb-1">
+                  1 {countryCurrency} = {
+                    country === "usa" ? "~₹93.39" :
+                    country === "uk" ? "~₹125.35" :
+                    country === "germany" || country === "ireland" ? "~₹109.12" :
+                    country === "canada" ? "~₹67.41" :
+                    country === "australia" ? "~₹65.80" :
+                    "N/A"
+                  } INR
+                </div>
+                <p className="text-sm text-indigo-foreground/80">
+                  Rates as of 13-4-2026. Subject to market changes.
+                </p>
+              </div>
             </div>
           )}
         </motion.div>

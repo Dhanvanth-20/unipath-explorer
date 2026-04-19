@@ -23,6 +23,8 @@ export interface University {
   minIELTS: number;
   minTOEFL: number;
   image: string;
+  isPublic: boolean;
+  intake: string[];
 }
 
 export const countries: Country[] = [
@@ -95,21 +97,21 @@ export const countries: Country[] = [
 ];
 
 export const universities: University[] = [
-  { id: "1", name: "MIT", country: "usa", ranking: 1, tuitionFee: 55000, location: "Cambridge, MA", courses: ["Computer Science", "Engineering", "Business"], acceptanceRate: 4, minGPA: 3.9, minIELTS: 7.0, minTOEFL: 100, image: "" },
-  { id: "2", name: "Stanford University", country: "usa", ranking: 3, tuitionFee: 52000, location: "Stanford, CA", courses: ["Computer Science", "Engineering", "Medicine"], acceptanceRate: 5, minGPA: 3.8, minIELTS: 7.0, minTOEFL: 100, image: "" },
-  { id: "3", name: "University of Oxford", country: "uk", ranking: 4, tuitionFee: 35000, location: "Oxford, England", courses: ["Law", "Medicine", "Business"], acceptanceRate: 17, minGPA: 3.7, minIELTS: 7.0, minTOEFL: 100, image: "" },
-  { id: "4", name: "University of Cambridge", country: "uk", ranking: 5, tuitionFee: 33000, location: "Cambridge, England", courses: ["Engineering", "Science", "Arts"], acceptanceRate: 21, minGPA: 3.7, minIELTS: 7.5, minTOEFL: 110, image: "" },
-  { id: "5", name: "University of Toronto", country: "canada", ranking: 18, tuitionFee: 32000, location: "Toronto, ON", courses: ["Computer Science", "Engineering", "Business"], acceptanceRate: 43, minGPA: 3.5, minIELTS: 6.5, minTOEFL: 89, image: "" },
-  { id: "6", name: "University of British Columbia", country: "canada", ranking: 35, tuitionFee: 28000, location: "Vancouver, BC", courses: ["Science", "Engineering", "Arts"], acceptanceRate: 52, minGPA: 3.3, minIELTS: 6.5, minTOEFL: 89, image: "" },
-  { id: "7", name: "University of Melbourne", country: "australia", ranking: 14, tuitionFee: 38000, location: "Melbourne, VIC", courses: ["Business", "Engineering", "Medicine"], acceptanceRate: 70, minGPA: 3.3, minIELTS: 6.5, minTOEFL: 79, image: "" },
-  { id: "8", name: "University of Sydney", country: "australia", ranking: 19, tuitionFee: 36000, location: "Sydney, NSW", courses: ["Law", "Business", "Engineering"], acceptanceRate: 65, minGPA: 3.2, minIELTS: 6.5, minTOEFL: 85, image: "" },
-  { id: "9", name: "Technical University of Munich", country: "germany", ranking: 30, tuitionFee: 15000, location: "Munich, Bavaria", courses: ["Engineering", "Computer Science", "Science"], acceptanceRate: 40, minGPA: 3.0, minIELTS: 6.5, minTOEFL: 88, image: "" },
-  { id: "10", name: "LMU Munich", country: "germany", ranking: 32, tuitionFee: 10000, location: "Munich, Bavaria", courses: ["Medicine", "Science", "Arts"], acceptanceRate: 38, minGPA: 3.0, minIELTS: 6.0, minTOEFL: 80, image: "" },
-  { id: "11", name: "Harvard University", country: "usa", ranking: 2, tuitionFee: 54000, location: "Cambridge, MA", courses: ["Law", "Medicine", "Business"], acceptanceRate: 3, minGPA: 3.9, minIELTS: 7.5, minTOEFL: 109, image: "" },
-  { id: "12", name: "Trinity College Dublin", country: "ireland", ranking: 81, tuitionFee: 18000, location: "Dublin", courses: ["Computer Science", "Business", "Arts"], acceptanceRate: 55, minGPA: 3.0, minIELTS: 6.5, minTOEFL: 88, image: "" },
-  { id: "13", name: "University of Waterloo", country: "canada", ranking: 112, tuitionFee: 25000, location: "Waterloo, ON", courses: ["Computer Science", "Engineering", "Math"], acceptanceRate: 53, minGPA: 3.2, minIELTS: 6.5, minTOEFL: 90, image: "" },
-  { id: "14", name: "Imperial College London", country: "uk", ranking: 6, tuitionFee: 36000, location: "London, England", courses: ["Engineering", "Medicine", "Science"], acceptanceRate: 14, minGPA: 3.7, minIELTS: 7.0, minTOEFL: 100, image: "" },
-  { id: "15", name: "UNSW Sydney", country: "australia", ranking: 45, tuitionFee: 34000, location: "Sydney, NSW", courses: ["Engineering", "Business", "Science"], acceptanceRate: 60, minGPA: 3.0, minIELTS: 6.5, minTOEFL: 83, image: "" },
+  { id: "1", name: "MIT", country: "usa", ranking: 1, tuitionFee: 55000, location: "Cambridge, MA", courses: ["Computer Science", "Engineering", "Business"], acceptanceRate: 4, minGPA: 9.8, minIELTS: 7.0, minTOEFL: 100, image: "", isPublic: false, intake: ["Fall (Sep)"] },
+  { id: "2", name: "Stanford University", country: "usa", ranking: 3, tuitionFee: 52000, location: "Stanford, CA", courses: ["Computer Science", "Engineering", "Medicine"], acceptanceRate: 5, minGPA: 9.6, minIELTS: 7.0, minTOEFL: 100, image: "", isPublic: false, intake: ["Fall (Sep)"] },
+  { id: "3", name: "University of Oxford", country: "uk", ranking: 4, tuitionFee: 35000, location: "Oxford, England", courses: ["Law", "Medicine", "Business"], acceptanceRate: 17, minGPA: 9.5, minIELTS: 7.0, minTOEFL: 100, image: "", isPublic: false, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "4", name: "University of Cambridge", country: "uk", ranking: 5, tuitionFee: 33000, location: "Cambridge, England", courses: ["Engineering", "Science", "Arts"], acceptanceRate: 21, minGPA: 9.4, minIELTS: 7.5, minTOEFL: 110, image: "", isPublic: false, intake: ["Fall (Sep)"] },
+  { id: "5", name: "University of Toronto", country: "canada", ranking: 18, tuitionFee: 32000, location: "Toronto, ON", courses: ["Computer Science", "Engineering", "Business"], acceptanceRate: 43, minGPA: 8.8, minIELTS: 6.5, minTOEFL: 89, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "6", name: "University of British Columbia", country: "canada", ranking: 35, tuitionFee: 28000, location: "Vancouver, BC", courses: ["Science", "Engineering", "Arts"], acceptanceRate: 52, minGPA: 8.5, minIELTS: 6.5, minTOEFL: 89, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "7", name: "University of Melbourne", country: "australia", ranking: 14, tuitionFee: 38000, location: "Melbourne, VIC", courses: ["Business", "Engineering", "Medicine"], acceptanceRate: 70, minGPA: 9.0, minIELTS: 6.5, minTOEFL: 79, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "8", name: "University of Sydney", country: "australia", ranking: 19, tuitionFee: 36000, location: "Sydney, NSW", courses: ["Law", "Business", "Engineering"], acceptanceRate: 65, minGPA: 8.7, minIELTS: 6.5, minTOEFL: 85, image: "", isPublic: true, intake: ["Fall (Sep)"] },
+  { id: "9", name: "Technical University of Munich", country: "germany", ranking: 30, tuitionFee: 15000, location: "Munich, Bavaria", courses: ["Engineering", "Computer Science", "Science"], acceptanceRate: 40, minGPA: 8.3, minIELTS: 6.5, minTOEFL: 88, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "10", name: "LMU Munich", country: "germany", ranking: 32, tuitionFee: 10000, location: "Munich, Bavaria", courses: ["Medicine", "Science", "Arts"], acceptanceRate: 38, minGPA: 8.2, minIELTS: 6.0, minTOEFL: 80, image: "", isPublic: true, intake: ["Fall (Sep)"] },
+  { id: "11", name: "Harvard University", country: "usa", ranking: 2, tuitionFee: 54000, location: "Cambridge, MA", courses: ["Law", "Medicine", "Business"], acceptanceRate: 3, minGPA: 9.75, minIELTS: 7.5, minTOEFL: 109, image: "", isPublic: false, intake: ["Fall (Sep)"] },
+  { id: "12", name: "Trinity College Dublin", country: "ireland", ranking: 81, tuitionFee: 18000, location: "Dublin", courses: ["Computer Science", "Business", "Arts"], acceptanceRate: 55, minGPA: 7.8, minIELTS: 6.5, minTOEFL: 88, image: "", isPublic: false, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "13", name: "University of Waterloo", country: "canada", ranking: 112, tuitionFee: 25000, location: "Waterloo, ON", courses: ["Computer Science", "Engineering", "Math"], acceptanceRate: 53, minGPA: 7.5, minIELTS: 6.5, minTOEFL: 90, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
+  { id: "14", name: "Imperial College London", country: "uk", ranking: 6, tuitionFee: 36000, location: "London, England", courses: ["Engineering", "Medicine", "Science"], acceptanceRate: 14, minGPA: 9.3, minIELTS: 7.0, minTOEFL: 100, image: "", isPublic: false, intake: ["Fall (Sep)"] },
+  { id: "15", name: "UNSW Sydney", country: "australia", ranking: 45, tuitionFee: 34000, location: "Sydney, NSW", courses: ["Engineering", "Business", "Science"], acceptanceRate: 60, minGPA: 7.8, minIELTS: 6.5, minTOEFL: 83, image: "", isPublic: true, intake: ["Fall (Sep)", "Spring (Jan)"] },
 ];
 
 export const allCourses = ["Computer Science", "Engineering", "Business", "Medicine", "Law", "Science", "Arts", "Math"];

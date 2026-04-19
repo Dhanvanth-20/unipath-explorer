@@ -1,21 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { GraduationCap, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
-const navLinks = [
-  { label: "Home", path: "/" },
+const protectedNavLinks = [
   { label: "Compare", path: "/compare" },
   { label: "Universities", path: "/universities" },
   { label: "Eligibility", path: "/eligibility" },
   { label: "Cost Calculator", path: "/calculator" },
-  { label: "Dashboard", path: "/dashboard" },
+  { label: "Visa Process", path: "/visa" },
 ];
 
 export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
+
+  const navLinks = [{ label: "Home", path: "/" }, ...protectedNavLinks];
 
   return (
     <header className="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-border">
@@ -45,12 +48,20 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
-          <Link to="/login">
-            <Button variant="ghost" size="sm">Log in</Button>
-          </Link>
-          <Link to="/signup">
-            <Button size="sm">Sign up</Button>
-          </Link>
+          {isLoggedIn ? (
+            <Button variant="ghost" size="sm" onClick={logout}>
+              Log out
+            </Button>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" size="sm">Log in</Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="sm">Sign up</Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -86,14 +97,21 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <div className="flex gap-2 pt-2 border-t border-border mt-2">
-                <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                  <Button variant="ghost" size="sm" className="w-full">Log in</Button>
-                </Link>
-                <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
-                  <Button size="sm" className="w-full">Sign up</Button>
-                </Link>
-              </div>
+              {!isLoggedIn && (
+                <div className="flex gap-2 pt-2 border-t border-border mt-2">
+                  <Link to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full">Log in</Button>
+                  </Link>
+                  <Link to="/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
+                    <Button size="sm" className="w-full">Sign up</Button>
+                  </Link>
+                </div>
+              )}
+              {isLoggedIn && (
+                <Button variant="destructive" size="sm" className="mt-2 w-full" onClick={() => { logout(); setMobileOpen(false); }}>
+                  Log out
+                </Button>
+              )}
             </nav>
           </motion.div>
         )}
