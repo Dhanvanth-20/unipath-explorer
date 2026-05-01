@@ -148,8 +148,6 @@ export default function EligibilityChecker() {
 
   const categories = result
     ? [
-        { label: "Safe", icon: CheckCircle, color: "text-success", bg: "bg-success/10", items: result.safe },
-        { label: "Moderate", icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10", items: result.moderate },
         { label: "Dream", icon: Trophy, color: "text-primary", bg: "bg-primary/10", items: result.dream },
       ]
     : [];

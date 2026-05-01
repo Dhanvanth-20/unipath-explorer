@@ -7,6 +7,7 @@ import session from 'express-session';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -37,7 +38,8 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/auth/google/callback'
+        callbackURL: 'http://localhost:3001/auth/google/callback',
+        proxy: true
     },
     async(accessToken, refreshToken, profile, done) => {
         try {
@@ -47,12 +49,13 @@ passport.use(new GoogleStrategy({
                     googleId: profile.id,
                     email: profile.emails[0].value,
                     name: profile.displayName,
-                    picture: profile.photos[0].value
+                    picture: profile.photos?.[0]?.value || ''
                 });
                 await user.save();
             }
             done(null, user);
         } catch (err) {
+            console.error('Google Strategy Error:', err);
             done(err, null);
         }
     }
@@ -70,15 +73,18 @@ app.get('/auth/google',
 );
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    (req, res, next) => {
+        console.log('Callback hit, query:', req.query);
+        next();
+    },
+    passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login` }),
     async(req, res) => {
         try {
-            const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.cookie('jwt', token, { httpOnly: true, secure: false });
-            // Redirect to frontend with token in query or state
-            res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}`);
+            const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+            res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
         } catch (err) {
-            res.status(500).json({ error: 'Auth failed' });
+            console.error('Callback Error:', err);
+            res.redirect(`${process.env.FRONTEND_URL}/login`);
         }
     }
 );
@@ -89,6 +95,61 @@ app.get('/auth/logout', (req, res) => {
         res.clearCookie('jwt');
         res.redirect(process.env.FRONTEND_URL);
     });
+});
+
+// Email/Password Auth Routes
+app.post('/api/auth/signup', async(req, res) => {
+    try {
+        const { email, password, name } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ error: 'User already exists' });
+        }
+
+        const user = new User({
+            email,
+            password,
+            name: name || email.split('@')[0]
+        });
+        await user.save();
+
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(201).json({ token, user: { id: user._id, email: user.email, name: user.name } });
+    } catch (err) {
+        console.error('Signup error:', err);
+        res.status(500).json({ error: 'Signup failed' });
+    }
+});
+
+app.post('/api/auth/login', async(req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token, user: { id: user._id, email: user.email, name: user.name } });
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ error: 'Login failed' });
+    }
 });
 
 app.get('/api/user', authenticateToken, async(req, res) => {
@@ -148,6 +209,9 @@ app.post('/api/calculate-cost', authenticateToken, (req, res) => {
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
+
+// Silence Chrome DevTools probe
+app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => res.json({}));
 
 // Health check (public)
 app.get('/api/health', (req, res) => {

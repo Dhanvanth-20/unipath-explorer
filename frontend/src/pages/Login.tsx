@@ -1,23 +1,10 @@
-import { useGoogleLogin } from '@react-oauth/google';
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { GraduationCap, ArrowRightLeft, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Login() {
-  const location = useLocation();
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      window.location.href = `http://localhost:3001/auth/google`;
-    },
-    onError: (error) => {
-      console.error('Google login error:', error);
-    },
-    flow: 'auth-code'
-  });
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/50 to-background flex items-center justify-center px-4 py-12">
       <motion.div 
@@ -41,16 +28,16 @@ export default function Login() {
           </CardHeader>
           
           <CardContent className="space-y-6 p-8">
-            <Button 
-              onClick={() => googleLogin()}
-              className="w-full h-14 rounded-2xl bg-gradient-to-r from-primary to-primary-foreground/80 border border-primary/20 shadow-xl hover:shadow-2xl hover:from-primary/90 hover:to-primary-foreground hover:-translate-y-0.5 transition-all duration-300 font-semibold text-lg flex items-center gap-3 group"
-            >
-              <ArrowRightLeft className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-              Continue with Google
-            </Button>
+            <a href="http://localhost:3001/auth/google" className="block w-full">
+              <Button 
+                type="button"
+                className="w-full h-14 rounded-2xl bg-gradient-to-r from-primary to-primary-foreground/80 border border-primary/20 shadow-xl hover:shadow-2xl hover:from-primary/90 hover:to-primary-foreground hover:-translate-y-0.5 transition-all duration-300 font-semibold text-lg flex items-center gap-3 group"
+              >
+                <ArrowRightLeft className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                Continue with Google
+              </Button>
+            </a>
             
-
-
             <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground text-center">
               <div className="flex flex-col items-center gap-1">
                 <Shield className="h-4 w-4 mx-auto" />

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Globe, Search, Calculator, CheckCircle } from "lucide-react";
+import { ArrowRight, Globe, Search, Calculator, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageLayout from "@/components/layout/PageLayout";
 import heroImage from "@/assets/hero-illustration.png";
@@ -56,19 +56,29 @@ export default function LandingPage() {
             </motion.div>
           </div>
 
-          <div className="bg-gradient-primary/5 border border-primary/20 rounded-3xl p-8 mb-8 shadow-2xl backdrop-blur-sm max-w-4xl mx-auto">
-            <div className="flex items-center justify-center gap-4 md:gap-6 text-center md:text-left">
-              <div className="bg-primary/30 p-4 rounded-2xl shadow-lg">
-                <span className="text-primary text-2xl font-bold block">ℹ️</span>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="relative overflow-hidden bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/20 rounded-2xl p-6 md:p-8 mb-8 shadow-[0_8px_30px_rgb(245,158,11,0.12)] backdrop-blur-md max-w-4xl mx-auto group"
+          >
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-orange-600 rounded-l-2xl"></div>
+            <div className="absolute -right-12 -top-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-colors duration-500"></div>
+            
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 text-center md:text-left relative z-10">
+              <div className="bg-amber-100 dark:bg-amber-900/40 p-3.5 rounded-2xl shadow-sm border border-amber-200 dark:border-amber-800/50 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <AlertTriangle className="w-8 h-8 text-amber-600 dark:text-amber-500" strokeWidth={2.5} />
               </div>
               <div className="flex-1">
-                <h4 className="font-black text-amber-800 text-xl md:text-2xl mb-3 uppercase tracking-wider drop-shadow-md">DISCLAIMER</h4>
-                <p className="text-base font-semibold text-destructive/90 leading-relaxed drop-shadow-sm">
-                  The currency values may vary from time-to-time. So please have an idea of current currency rates/values before making financial decisions.
+                <h4 className="font-bold text-amber-800 dark:text-amber-400 text-lg md:text-xl mb-2 uppercase tracking-widest flex items-center justify-center md:justify-start gap-2">
+                  Financial Disclaimer
+                </h4>
+                <p className="text-sm md:text-base text-amber-900/80 dark:text-amber-200/80 leading-relaxed font-medium text-justify">
+                  Please be advised that all currency conversions and financial estimates provided on this platform are for informational purposes only. Exchange rates are subject to continuous market fluctuations. Users are strongly encouraged to independently verify all current rates and fees prior to making any definitive financial decisions or commitments.
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
       <section className="pt-8 pb-16">
